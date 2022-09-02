@@ -47,11 +47,10 @@ class Widgets extends REST_Controller {
     public function crearVisitante_post() {
         
         /*Variables*/
-        $dataRequest['name'] = strtoupper($this->post('name'));
+        $dataRequest['name'] = strtoupper($this->post('nombre'));
         $dataRequest['email'] = strtoupper($this->post('email'));
-        $dataRequest['movil'] = $this->post('movilphone');
-        $dataRequest['gender'] = $this->post('gender');
-        $dataRequest['source'] = 'APP';
+        $dataRequest['movil'] = $this->post('telcel');
+        $dataRequest['passwd'] = sha1($this->post('password'));
         
         if ($dataRequest['name'] !== NULL && $dataRequest['email'] !== NULL && $dataRequest['movil'] !== NULL) {
         
@@ -62,12 +61,12 @@ class Widgets extends REST_Controller {
                     if ($this->validaTipoString($dataRequest['email'],7)){
                         
                         /*Consulta el Modelo - verifica si usuario no esta registrado*/
-                        $verifyClient = $this->MPrincipal->verifyphone($dataRequest['movil']);
+                        $verifyClient = $this->MPrincipal->verifymail($dataRequest['email']);
 
                         if ($verifyClient == FALSE){
 						
-                            /*Consulta el Modelo - registra cliente*/
-                            $setData = $this->MPrincipal->setClient($dataRequest);
+                            /*Consulta el Modelo - registra visitante*/
+                            $setData = $this->MPrincipal->setVisitant($dataRequest);
 
                             if ($setData){
                                                                 
@@ -77,8 +76,8 @@ class Widgets extends REST_Controller {
                                 $this->response([
                                     'status' => 1,
                                     'message' => 'La cuenta fue creada exitosamente',
-                                    'information' => $datosCliente
-                                ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+                                    'information' => $dataRequest['email']
+                                ], REST_Controller::HTTP_OK); // 200
 
                             } else {
 
@@ -86,7 +85,7 @@ class Widgets extends REST_Controller {
                                 $this->response([
                                     'status' => 0,
                                     'message' => 'No fue posible crear la cuenta',
-                                ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+                                ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR); // 500
 
                             }
 
@@ -95,8 +94,8 @@ class Widgets extends REST_Controller {
                             // Set the response and exit
                             $this->response([
                                 'status' => 0,
-                                'message' => 'El número de teléfono ya se encuentra registrado',
-                            ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+                                'message' => 'El Correo Electronico ya se encuentra registrado',
+                            ], REST_Controller::HTTP_BAD_REQUEST); // 401
 
                         }
                     
@@ -106,7 +105,7 @@ class Widgets extends REST_Controller {
                         $this->response([
                             'status' => 0,
                             'message' => 'El Email es invalido',
-                        ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+                        ], REST_Controller::HTTP_BAD_REQUEST); // 401
                         
                     }
                 
@@ -116,7 +115,7 @@ class Widgets extends REST_Controller {
                     $this->response([
                         'status' => 0,
                         'message' => 'El numero de telefono no es valido, 10 digitos sin espacios.',
-                    ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+                    ], REST_Controller::HTTP_BAD_REQUEST); // 401
                     
                 }
         
@@ -125,8 +124,8 @@ class Widgets extends REST_Controller {
                 // Set the response and exit
                 $this->response([
                     'status' => 0,
-                    'message' => 'Los datos suministrados no son validos (nombres y apellidos)',
-                ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+                    'message' => 'Los datos suministrados no son validos (nombre)',
+                ], REST_Controller::HTTP_BAD_REQUEST); // 401
                 
             }
                 
@@ -136,7 +135,7 @@ class Widgets extends REST_Controller {
             $this->response([
                 'status' => 0,
                 'message' => 'Faltan datos obligatorios'
-            ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+            ], REST_Controller::HTTP_BAD_REQUEST); // 401
             
         }   
         

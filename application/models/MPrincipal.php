@@ -12,6 +12,78 @@ class MPrincipal extends CI_Model {
         //$this->db->query("SET time_zone='America/Bogota'");
         
     }
+
+
+    /**************************************************************************/
+    public function verifymail($mail) {
+                
+        $query = $this->db->query("SELECT
+                                idUsuario,
+                                nombreUsuario,
+                                identificacion,
+                                correoElectronico,
+                                activo
+                                FROM usuarios
+                                WHERE
+                                correoElectronico = '"+$mail+"'");
+        
+        $cant = $query->num_rows();
+        
+        if($cant>0){
+            
+            return $query->row();
+            
+        } else {
+            
+            return FALSE;
+            
+        }
+        
+    }
+
+    /**************************************************************************/
+    public function setVisitant($data) {
+                
+        $this->db->trans_strict(TRUE);
+        $this->db->trans_start();
+        $this->db->query("INSERT INTO
+                            usuarios (
+                            nombreUsuario,
+                            identificacion,
+                            correoElectronico,
+                            password,
+                            activo,
+                            fechaRegistro,
+                            idRol
+                            ) VALUES (
+                            '".$data['name']."',
+                            NULL,
+                            '".$data['email']."',
+                            '".$data['passwd']."',
+                            'S',
+                            NOW(),
+							1)");
+        
+        $idClient = $this->db->insert_id();
+        $this->db->trans_complete();
+        $this->db->trans_off();
+        
+        if ($this->db->trans_status() === FALSE){
+
+            return false;
+
+        } else {
+            
+            return $idClient;
+
+        }
+        
+    }
+
+
+
+
+
     
     /***************************************************************************/
     public function getproducts($line) {
@@ -223,35 +295,7 @@ class MPrincipal extends CI_Model {
         
     }
     
-    /**************************************************************************/
-    public function verifyphone($phone) {
-                
-        $query = $this->db->query("SELECT
-                                c.idCliente,
-                                c.identificacion,
-                                c.nombreApellido,
-                                c.genero,
-                                c.telefonoMovil,
-                                c.email,
-                                c.activo
-                                FROM
-                                clientes c
-                                WHERE
-                                telefonoMovil = '".$phone."'");
-        
-        $cant = $query->num_rows();
-        
-        if($cant>0){
-            
-            return $query->row();
-            
-        } else {
-            
-            return FALSE;
-            
-        }
-        
-    }
+    
     
     /**************************************************************************/
     public function verifylogin($data) {
@@ -280,51 +324,7 @@ class MPrincipal extends CI_Model {
         
     }
     
-    /**************************************************************************/
-    public function setClient($data) {
-                
-        $this->db->trans_strict(TRUE);
-        $this->db->trans_start();
-        $this->db->query("INSERT INTO
-                            clientes (
-                            identificacion,
-                            nombreApellido,
-                            genero,
-                            telefonoMovil,
-                            email,
-                            password,
-                            activo,
-                            fechaRegistro,
-                            fuenteRegistro,
-							observacion
-                            ) VALUES (
-                            '".$data['movil']."',
-                            '".$data['name']."',
-                            '".$data['gender']."',
-                            '".$data['movil']."',
-                            '".$data['email']."',
-                            '".sha1('CAR2020')."',
-                            'Y',
-                            NOW(),
-                            '".$data['source']."',
-							'".$data['cupon']."')");
         
-        $idClient = $this->db->insert_id();
-        $this->db->trans_complete();
-        $this->db->trans_off();
-        
-        if ($this->db->trans_status() === FALSE){
-
-            return false;
-
-        } else {
-            
-            return $idClient;
-
-        }
-        
-    }
-    
     /**************************************************************************/
     public function setStatProduct($data) {
                 
