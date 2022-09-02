@@ -1,8 +1,8 @@
 <?php
 /*******************************************************************************
 * Clase: Widgets
-* Autor: jasanchezr
-* Fecha de Creación: 07/08/2020
+* Autor: @jhasaren
+* Fecha de Creación: 01/09/2022
 * Descripcion: Controlador del API donde se atienden las solicitudes externas.
 *******************************************************************************/
 
@@ -19,15 +19,32 @@ class Widgets extends REST_Controller {
         $this->load->model('MPrincipal'); /*Carga el Modelo*/
         
     }
+
+    /***************************************************************************
+     * Metodo: echoping (GET)
+     * Autor: @jhasaren
+     * Fecha de Creación: 01/09/2022
+     * Response: JSON
+     * Descripcion: Probar funcionamiento del servicio
+     **************************************************************************/
+    public function echoping_get() {
+
+        // Set the response and exit
+        $this->response([
+            'status' => 1,
+            'message' => 'Servcion en funcionamiento'
+        ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+
+    }
     
     /***************************************************************************
-     * Metodo: registerClient (POST)
-     * Autor: jasanchezr
-     * Fecha de Creación: 07/08/2020
+     * Metodo: crearVisitante (POST)
+     * Autor: @jhasaren
+     * Fecha de Creación: 01/09/2022
      * Response: JSON
-     * Descripcion: Registrar cliente
+     * Descripcion: Registrar nuevo visitante
      **************************************************************************/
-    public function registerClient_post() {
+    public function crearVisitante_post() {
         
         /*Variables*/
         $dataRequest['name'] = strtoupper($this->post('name'));
@@ -49,38 +66,11 @@ class Widgets extends REST_Controller {
 
                         if ($verifyClient == FALSE){
 						
-							/**********************************************/
-                            /*Codigo Cupon - 5 caracteres*/
-                            $key = '';
-                            $pattern = '1234567890abcdefghijklmnopqrstuvwxyz';
-                            $max = strlen($pattern)-1;
-                            for($i=0; $i < 5 ; $i++) {
-                                $key .= $pattern{mt_rand(0,$max)};
-                            }
-                            $dataRequest['cupon'] = strtoupper($key);
-                            /**********************************************/
-
                             /*Consulta el Modelo - registra cliente*/
                             $setData = $this->MPrincipal->setClient($dataRequest);
 
                             if ($setData){
-                                
-                                /************************************************/
-                                /* Enviar SMS - Bienvenida*/
-                                /************************************************/
-                                /*$textSMS = "Carrusel: Te damos la bienvenida! Mira nuestro catálogo: ropa infantil, accesorios y artículos. Descarga nuestra App o visita la Página Web https://rb.gy/bzjlzl";
-                                $numberPhone = $dataRequest['movil'];
-                                $this->MPrincipal->sendSMS($numberPhone,$textSMS);*/
-                                /************************************************/
-								
-				/************************************************/
-                                /* Enviar SMS - Cupon*/
-                                /************************************************/
-                                $textSMS = "Carrusel: bienvenido(a), te regalamos cupon del 10% de descuento para redimirlo en tu proxima compra. Valido en este mes. CODIGO: ".$dataRequest['cupon'];
-                                $numberPhone = $dataRequest['movil'];
-                                $this->MPrincipal->sendSMS($numberPhone,$textSMS);
-                                /************************************************/
-                                
+                                                                
                                 $datosCliente = $this->MPrincipal->verifyphone($dataRequest['movil']);
 
                                 // Set the response and exit
