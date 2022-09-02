@@ -25,7 +25,7 @@ class MPrincipal extends CI_Model {
                                 activo
                                 FROM usuarios
                                 WHERE
-                                correoElectronico = '"+$mail+"'");
+                                correoElectronico = '".$mail."'");
         
         $cant = $query->num_rows();
         
