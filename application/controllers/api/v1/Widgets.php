@@ -69,8 +69,6 @@ class Widgets extends REST_Controller {
                             $setData = $this->MPrincipal->setVisitant($dataRequest);
 
                             if ($setData){
-                                                                
-                                $datosCliente = $this->MPrincipal->verifyphone($dataRequest['movil']);
 
                                 // Set the response and exit
                                 $this->response([
