@@ -216,7 +216,7 @@ $config['auth_library_function'] = ''; /*jasanchez*/
 | Array of usernames and passwords for login, if ldap is configured this is ignored
 |
 */
-$config['rest_valid_logins'] = ['apicarrusel' => '4p1C4rru$3L']; /*jasanchez*/
+$config['rest_valid_logins'] = ['delicatt' => 'Emp4n4d4$3L']; /*jasanchez*/
 
 /*
 |--------------------------------------------------------------------------
