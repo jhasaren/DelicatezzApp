@@ -3,8 +3,8 @@
 * Nombre de la Clase: CPrincipal
 * Descripcion: Es el controlador principal el cual carga por default al iniciar
 * en el sistema.
-* Autor: jasanchezr
-* Fecha Creacion: 07/08/2020, Ultima modificacion: 
+* Autor: @jhasaren
+* Fecha Creacion: 01/09/2022, Ultima modificacion: 
 **************************************************************************/
 
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -30,8 +30,8 @@ class CPrincipal extends CI_Controller {
     /**************************************************************************
      * Nombre del Metodo: index (por defecto CodeIgniter)
      * Descripcion: Carga la vista home cuando se carga el inicio
-     * Autor: jasanchezr
-     * Fecha Creacion: 07/08/2020, Ultima modificacion: 
+     * Autor: @jhasaren
+     * Fecha Creacion: 01/09/2022, Ultima modificacion:
      **************************************************************************/
     public function index() {
         
