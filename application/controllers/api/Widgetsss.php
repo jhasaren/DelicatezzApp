@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . '/libraries/REST_Controller.php'; /*Incluye la libreria Rest_Controller*/
 
 
-class Widgets extends REST_Controller {
+class Widgetsss extends REST_Controller {
     
     function __construct() {
         
