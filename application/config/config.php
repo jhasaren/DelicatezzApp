@@ -510,7 +510,7 @@ $config['rewrite_short_tags'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
-| Reverse Proxy IPs Config
+| Reverse Proxy IPs Configs
 |--------------------------------------------------------------------------
 |
 | If your server is behind a reverse proxy, you must whitelist the proxy
