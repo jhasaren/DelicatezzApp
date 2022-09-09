@@ -3,7 +3,7 @@
     
     <body>
                 
-        DelicatezzApp
+        DelicatezzApp - Proyecto de Integracion web y movil
 
     </body>
 </html>
