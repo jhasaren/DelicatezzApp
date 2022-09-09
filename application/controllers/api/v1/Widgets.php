@@ -42,7 +42,7 @@ class Widgets extends REST_Controller {
      * Autor: @jhasaren
      * Fecha de Creación: 01/09/2022
      * Response: JSON
-     * Descripcion: Registrar nuevo visitante
+     * Descripcion: Registrar nuevo visitante en la plataforma
      **************************************************************************/
     public function crearVisitante_post() {
         
@@ -138,6 +138,118 @@ class Widgets extends REST_Controller {
         }   
         
     }
+
+    /***************************************************************************
+     * Metodo: crearVisitante (POST)
+     * Autor: @jhasaren
+     * Fecha de Creación: 08/09/2022
+     * Response: JSON
+     * Descripcion: Registrar nuevo comercio en la plataforma
+     **************************************************************************/
+    public function crearComercio_post() {
+        
+        /*Variables*/
+        $dataRequest['name'] = strtoupper($this->post('nombre'));
+        $dataRequest['email'] = strtoupper($this->post('email'));
+        $dataRequest['movil'] = $this->post('telcel');
+        $dataRequest['passwd'] = sha1($this->post('password'));
+        
+        if ($dataRequest['name'] !== NULL && $dataRequest['email'] !== NULL && $dataRequest['movil'] !== NULL) {
+        
+            if (strlen($dataRequest['name']) > 3) {
+                
+                if ($this->validaTipoString($dataRequest['movil'],6)){
+                    
+                    if ($this->validaTipoString($dataRequest['email'],7)){
+                        
+                        /*Consulta el Modelo - verifica si usuario no esta registrado*/
+                        $verifyClient = $this->MPrincipal->verifymail($dataRequest['email']);
+
+                        if ($verifyClient == FALSE){
+						
+                            /*Consulta el Modelo - registra visitante*/
+                            $setData = $this->MPrincipal->setVisitant($dataRequest);
+
+                            if ($setData){
+
+                                // Set the response and exit
+                                $this->response([
+                                    'status' => 1,
+                                    'message' => 'La cuenta fue creada exitosamente',
+                                    'information' => $dataRequest['email']
+                                ], REST_Controller::HTTP_OK); // 200
+
+                            } else {
+
+                                // Set the response and exit
+                                $this->response([
+                                    'status' => 0,
+                                    'message' => 'No fue posible crear la cuenta',
+                                ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR); // 500
+
+                            }
+
+                        } else {
+
+                            // Set the response and exit
+                            $this->response([
+                                'status' => 0,
+                                'message' => 'El Correo Electronico ya se encuentra registrado',
+                            ], REST_Controller::HTTP_BAD_REQUEST); // 401
+
+                        }
+                    
+                    } else {
+                        
+                        // Set the response and exit
+                        $this->response([
+                            'status' => 0,
+                            'message' => 'El Email es invalido',
+                        ], REST_Controller::HTTP_BAD_REQUEST); // 401
+                        
+                    }
+                
+                } else {
+                    
+                    // Set the response and exit
+                    $this->response([
+                        'status' => 0,
+                        'message' => 'El numero de telefono no es valido, 10 digitos sin espacios.',
+                    ], REST_Controller::HTTP_BAD_REQUEST); // 401
+                    
+                }
+        
+            } else {
+                
+                // Set the response and exit
+                $this->response([
+                    'status' => 0,
+                    'message' => 'Los datos suministrados no son validos (nombre)',
+                ], REST_Controller::HTTP_BAD_REQUEST); // 401
+                
+            }
+                
+        } else {
+            
+            // Set the response and exit
+            $this->response([
+                'status' => 0,
+                'message' => 'Faltan datos obligatorios'
+            ], REST_Controller::HTTP_BAD_REQUEST); // 401
+            
+        }   
+        
+    }
+
+
+
+
+
+
+
+
+
+
     
     /***************************************************************************
      * Metodo: addProduct (POST)
