@@ -144,7 +144,7 @@ class Widgets extends REST_Controller {
      * Autor: @jhasaren
      * Fecha de Creación: 08/09/2022
      * Response: JSON
-     * Descripcion: Registrar nuevo comercio en la plataforma
+     * Descripcion: Registrar nuevo comercio
      **************************************************************************/
     public function crearComercio_post() {
         
