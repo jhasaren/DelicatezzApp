@@ -123,7 +123,7 @@ class MPrincipal extends CI_Model {
                             '".$data['nameProp']."',
                             '".$data['horario']."',
                             'S',
-                            NULL,
+                            'https://delicatezzapp.amadeusoluciones.tech/public/web/img/img_comercio_gen.png',
 							".$idClient.")");
 
         $this->db->trans_complete();
