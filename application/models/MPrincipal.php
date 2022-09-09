@@ -208,7 +208,7 @@ class MPrincipal extends CI_Model {
                             imgURLProducto,
                             idComercio
                             ) VALUES (
-                            '".$data['nombreProducto']."',
+                            '".$data['nameProducto']."',
                             ".$data['precio'].",
                             '".$data['info']."',
                             '".$data['promo']."',
