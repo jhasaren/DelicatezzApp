@@ -245,6 +245,79 @@ class Widgets extends REST_Controller {
         
     }
 
+    /***************************************************************************
+     * Metodo: login (POST)
+     * Autor: @jhasaren
+     * Fecha de Creación: 08/09/2022
+     * Response: JSON
+     * Descripcion: Autenticacion en el sistema
+     **************************************************************************/
+    public function login_post() {
+        
+        /*Variables*/
+        $dataRequest['email'] = strtoupper($this->post('email'));
+        $dataRequest['passwd'] = sha1($this->post('password'));
+        
+        if ($dataRequest['email'] !== NULL && $dataRequest['passwd'] !== NULL) {
+                                            
+            if ($this->validaTipoString($dataRequest['email'],7)){
+                
+                /*Consulta el Modelo - verifica si usuario esta registrado*/
+                $verifyClient = $this->MPrincipal->verifymail($dataRequest['email']);
+
+                if ($verifyClient !== FALSE){
+
+                    if ($verifyClient->password == $dataRequest['passwd']) {
+
+                        // Set the response and exit
+                        $this->response([
+                            'status' => 1,
+                            'message' => 'Autenticacion Correcta',
+                            'information' => $verifyClient
+                        ], REST_Controller::HTTP_OK); // 200
+
+                    } else {
+
+                        // Set the response and exit
+                        $this->response([
+                            'status' => 0,
+                            'message' => 'Autenticacion incorrecta',
+                        ], REST_Controller::HTTP_UNAUTHORIZED); // 401
+
+                    }
+
+                } else {
+
+                    // Set the response and exit
+                    $this->response([
+                        'status' => 0,
+                        'message' => 'El correo electronico no se encuentra registrado',
+                    ], REST_Controller::HTTP_BAD_REQUEST); // 400
+
+                }
+            
+            } else {
+                
+                // Set the response and exit
+                $this->response([
+                    'status' => 0,
+                    'message' => 'El Email es invalido',
+                ], REST_Controller::HTTP_BAD_REQUEST); // 400
+                
+            }
+                
+        } else {
+            
+            // Set the response and exit
+            $this->response([
+                'status' => 0,
+                'message' => 'Faltan datos obligatorios'
+            ], REST_Controller::HTTP_BAD_REQUEST); // 400
+            
+        }   
+        
+    }
+
 
 
 

@@ -18,14 +18,27 @@ class MPrincipal extends CI_Model {
     public function verifymail($mail) {
                 
         $query = $this->db->query("SELECT
-                                idUsuario,
-                                nombreUsuario,
-                                identificacion,
-                                correoElectronico,
-                                activo
-                                FROM usuarios
+                                u.idUsuario,
+                                u.nombreUsuario,
+                                u.identificacion,
+                                u.correoElectronico,
+                                u.password,
+                                u.activo,
+                                u.idRol,
+                                r.nombreRol,
+                                c.idComercio,
+                                c.nombreComercio,
+                                c.direccion,
+                                c.telefono,
+                                c.nombrePropietario,
+                                c.horarioAtencion,
+                                c.activo,
+                                c.imgURLComercio
+                                FROM usuarios u
+                                JOIN roles r ON u.idRol = r.idRol
+                                LEFT JOIN info_comercio c ON u.idUsuario = c.idUsuario
                                 WHERE
-                                correoElectronico = '".$mail."'");
+                                u.correoElectronico = '".$mail."'");
         
         $cant = $query->num_rows();
         
