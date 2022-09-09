@@ -318,6 +318,114 @@ class Widgets extends REST_Controller {
         
     }
 
+    /***************************************************************************
+     * Metodo: crearProducto (POST)
+     * Autor: @jhasaren
+     * Fecha de Creación: 08/09/2022
+     * Response: JSON
+     * Descripcion: Registrar nuevo producto
+     **************************************************************************/
+    public function crearProducto_post() {
+        
+        /*Variables*/
+        $dataRequest['nameProducto'] = strtoupper($this->post('nombreProducto'));
+        $dataRequest['precio'] = $this->post('precio');
+        $dataRequest['info'] = strtoupper($this->post('info'));
+        $dataRequest['promo'] = strtoupper($this->post('promocion'));
+        $dataRequest['idComercio'] = $this->post('idComercio');
+        $dataRequest['idPropietario'] = $this->post('idPropietario');
+        
+        if ($dataRequest['nameProducto'] !== NULL && $dataRequest['precio'] !== NULL && $dataRequest['info'] !== NULL && $dataRequest['promo'] !== NULL && $dataRequest['idComercio'] !== NULL && $dataRequest['idPropietario'] !== NULL) {
+        
+            if (strlen($dataRequest['nameProducto']) > 3 && strlen($dataRequest['info']) > 5 && strlen($dataRequest['promo']) > 5) {
+                
+                if ($this->validaTipoString($dataRequest['precio'],5)){
+                    
+                    if ($this->validaTipoString($dataRequest['idComercio'],2)){
+                        
+                        /*Consulta el Modelo - verifica si el comercio existe*/
+                        $verifyComercio = $this->MPrincipal->verifycomercio($dataRequest['idComercio'], $dataRequest['idPropietario']);
+
+                        if ($verifyComercio !== FALSE){
+						
+                            /*Consulta el Modelo - registra visitante*/
+                            $setData = $this->MPrincipal->setProducto($dataRequest);
+
+                            if ($setData){
+
+                                // Set the response and exit
+                                $this->response([
+                                    'status' => 1,
+                                    'message' => 'Se creo correctamente el producto',
+                                    'information' => $dataRequest['nameProducto']
+                                ], REST_Controller::HTTP_OK); // 200
+
+                            } else {
+
+                                // Set the response and exit
+                                $this->response([
+                                    'status' => 0,
+                                    'message' => 'No fue posible crear el producto',
+                                ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR); // 500
+
+                            }
+
+                        } else {
+
+                            // Set the response and exit
+                            $this->response([
+                                'status' => 0,
+                                'message' => 'El identificador del comercio es invalido',
+                            ], REST_Controller::HTTP_UNAUTHORIZED); // 401
+
+                        }
+                    
+                    } else {
+                        
+                        // Set the response and exit
+                        $this->response([
+                            'status' => 0,
+                            'message' => 'El identificador del comercio es incorrecto',
+                        ], REST_Controller::HTTP_BAD_REQUEST); // 400
+                        
+                    }
+                
+                } else {
+                    
+                    // Set the response and exit
+                    $this->response([
+                        'status' => 0,
+                        'message' => 'El precio del producto debe estar entre 4 y 5 digitos.',
+                    ], REST_Controller::HTTP_BAD_REQUEST); // 400
+                    
+                }
+        
+            } else {
+                
+                // Set the response and exit
+                $this->response([
+                    'status' => 0,
+                    'message' => 'Los datos suministrados no son validos',
+                ], REST_Controller::HTTP_BAD_REQUEST); // 400
+                
+            }
+                
+        } else {
+            
+            // Set the response and exit
+            $this->response([
+                'status' => 0,
+                'message' => 'Faltan datos obligatorios'
+            ], REST_Controller::HTTP_BAD_REQUEST); // 400
+            
+        }   
+        
+    }
+
+
+
+
+
 
 
 
@@ -1249,8 +1357,8 @@ class Widgets extends REST_Controller {
         }
         
         if ($type == 2){
-            /* Numero de 1 a 2 digitos */
-            $reg = "/^[0-9]{1,2}+$/";
+            /* Numero de 1 a 3 digitos */
+            $reg = "/^[0-9]{1,3}+$/";
             return preg_match($reg, $dato);
 
         }
@@ -1270,8 +1378,8 @@ class Widgets extends REST_Controller {
         }
         
         if ($type == 5){
-            /* Numero de 6 a 7 digitos */
-            $reg = "/^[0-9]{6,7}+$/";
+            /* Numero de 4 a 5 digitos */
+            $reg = "/^[0-9]{4,5}+$/";
             return preg_match($reg, $dato);
 
         }

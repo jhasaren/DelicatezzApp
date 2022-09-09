@@ -55,6 +55,46 @@ class MPrincipal extends CI_Model {
     }
 
     /**************************************************************************/
+    public function verifycomercio($idComercio, $idPropietario) {
+                
+        $query = $this->db->query("SELECT
+                                u.idUsuario,
+                                u.nombreUsuario,
+                                u.identificacion,
+                                u.correoElectronico,
+                                u.password,
+                                u.activo,
+                                u.idRol,
+                                r.nombreRol,
+                                c.idComercio,
+                                c.nombreComercio,
+                                c.direccion,
+                                c.telefono,
+                                c.nombrePropietario,
+                                c.horarioAtencion,
+                                c.activo,
+                                c.imgURLComercio
+                                FROM usuarios u
+                                JOIN roles r ON u.idRol = r.idRol
+                                LEFT JOIN info_comercio c ON u.idUsuario = c.idUsuario
+                                WHERE
+                                u.identificacion = '".$idPropietario."' and c.idComercio = ".$idComercio." ");
+        
+        $cant = $query->num_rows();
+        
+        if($cant>0){
+            
+            return $query->row();
+            
+        } else {
+            
+            return FALSE;
+            
+        }
+        
+    }
+
+    /**************************************************************************/
     public function setVisitant($data) {
                 
         $this->db->trans_strict(TRUE);
@@ -92,7 +132,6 @@ class MPrincipal extends CI_Model {
         }
         
     }
-
 
     /**************************************************************************/
     public function setComercio($data) {
@@ -153,6 +192,54 @@ class MPrincipal extends CI_Model {
         }
         
     }
+
+    /**************************************************************************/
+    public function setProducto($data) {
+                
+        $this->db->trans_strict(TRUE);
+        $this->db->trans_start();
+        $this->db->query("INSERT INTO
+                            productos (
+                            nombreProducto,
+                            precio,
+                            infoGeneral,
+                            promocion,
+                            activo,
+                            imgURLProducto,
+                            idComercio
+                            ) VALUES (
+                            '".$data['nombreProducto']."',
+                            ".$data['precio'].",
+                            '".$data['info']."',
+                            '".$data['promo']."',
+                            'S',
+                            'https://delicatezzapp.amadeusoluciones.tech/public/web/img/img_producto_gen.png',
+							".$data['idComercio'].")");
+        
+        $idProducto = $this->db->insert_id();
+        $this->db->trans_complete();
+        $this->db->trans_off();
+        
+        if ($this->db->trans_status() === FALSE){
+
+            return false;
+
+        } else {
+            
+            return $idProducto;
+
+        }
+        
+    }
+
+
+
+
+
+
+
+
+
 
 
 
