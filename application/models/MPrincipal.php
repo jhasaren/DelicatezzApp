@@ -81,6 +81,71 @@ class MPrincipal extends CI_Model {
     }
 
 
+    /**************************************************************************/
+    public function setComercio($data) {
+                
+        $this->db->trans_strict(TRUE);
+        $this->db->trans_start();
+        $this->db->query("INSERT INTO
+                            usuarios (
+                            nombreUsuario,
+                            identificacion,
+                            correoElectronico,
+                            password,
+                            activo,
+                            fechaRegistro,
+                            idRol
+                            ) VALUES (
+                            '".$data['nameProp']."',
+                            '".$data['identificacion']."',
+                            '".$data['email']."',
+                            '".$data['passwd']."',
+                            'S',
+                            NOW(),
+							2)");
+        
+        $idClient = $this->db->insert_id();
+
+        $this->db->query("INSERT INTO
+                            info_comercio (
+                            nombreComercio,
+                            direccion,
+                            telefono,
+                            nombrePropietario,
+                            horarioAtencion,
+                            activo,
+                            imgURLComercio,
+                            idUsuario
+                            ) VALUES (
+                            '".$data['name']."',
+                            '".$data['direccion']."',
+                            '".$data['movil']."',
+                            '".$data['nameProp']."',
+                            '".$data['horario']."',
+                            'S',
+                            NULL,
+							".$idClient.")");
+
+        $this->db->trans_complete();
+        $this->db->trans_off();
+        
+        if ($this->db->trans_status() === FALSE){
+
+            return false;
+
+        } else {
+            
+            return $idClient;
+
+        }
+        
+    }
+
+
+
+
+
+
 
 
 

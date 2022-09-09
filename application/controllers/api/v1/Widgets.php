@@ -140,7 +140,7 @@ class Widgets extends REST_Controller {
     }
 
     /***************************************************************************
-     * Metodo: crearVisitante (POST)
+     * Metodo: crearComercio (POST)
      * Autor: @jhasaren
      * Fecha de Creación: 08/09/2022
      * Response: JSON
@@ -149,14 +149,18 @@ class Widgets extends REST_Controller {
     public function crearComercio_post() {
         
         /*Variables*/
-        $dataRequest['name'] = strtoupper($this->post('nombre'));
+        $dataRequest['name'] = strtoupper($this->post('nombreComercio'));
+        $dataRequest['nameProp'] = strtoupper($this->post('nombrePropietario'));
+        $dataRequest['identificacion'] = strtoupper($this->post('idPropietario'));
         $dataRequest['email'] = strtoupper($this->post('email'));
         $dataRequest['movil'] = $this->post('telcel');
         $dataRequest['passwd'] = sha1($this->post('password'));
+        $dataRequest['direccion'] = strtoupper($this->post('direccion'));
+        $dataRequest['horario'] = strtoupper($this->post('horario'));
         
-        if ($dataRequest['name'] !== NULL && $dataRequest['email'] !== NULL && $dataRequest['movil'] !== NULL) {
+        if ($dataRequest['name'] !== NULL && $dataRequest['nameProp'] !== NULL && $dataRequest['identificacion'] !== NULL && $dataRequest['identificacion'] !== NULL && $dataRequest['email'] !== NULL && $dataRequest['movil'] !== NULL && $dataRequest['direccion'] !== NULL) {
         
-            if (strlen($dataRequest['name']) > 3) {
+            if (strlen($dataRequest['name']) > 3 && strlen($dataRequest['nameProp']) > 3 && strlen($dataRequest['identificacion']) > 5) {
                 
                 if ($this->validaTipoString($dataRequest['movil'],6)){
                     
@@ -168,14 +172,14 @@ class Widgets extends REST_Controller {
                         if ($verifyClient == FALSE){
 						
                             /*Consulta el Modelo - registra visitante*/
-                            $setData = $this->MPrincipal->setVisitant($dataRequest);
+                            $setData = $this->MPrincipal->setComercio($dataRequest);
 
                             if ($setData){
 
                                 // Set the response and exit
                                 $this->response([
                                     'status' => 1,
-                                    'message' => 'La cuenta fue creada exitosamente',
+                                    'message' => 'La cuenta del Comercio fue creada exitosamente',
                                     'information' => $dataRequest['email']
                                 ], REST_Controller::HTTP_OK); // 200
 
@@ -184,7 +188,7 @@ class Widgets extends REST_Controller {
                                 // Set the response and exit
                                 $this->response([
                                     'status' => 0,
-                                    'message' => 'No fue posible crear la cuenta',
+                                    'message' => 'No fue posible crear la cuenta del Comercio',
                                 ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR); // 500
 
                             }
@@ -224,7 +228,7 @@ class Widgets extends REST_Controller {
                 // Set the response and exit
                 $this->response([
                     'status' => 0,
-                    'message' => 'Los datos suministrados no son validos (nombre)',
+                    'message' => 'Los datos suministrados no son validos',
                 ], REST_Controller::HTTP_BAD_REQUEST); // 401
                 
             }
