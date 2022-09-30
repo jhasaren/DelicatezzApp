@@ -466,7 +466,7 @@ class Widgets extends REST_Controller {
     public function getProductos_get() {
 
         /*Variables*/
-        $idComercio = $this->post('comercio');
+        $idComercio = $this->get('comercio');
 
         if ($idComercio !== NULL) {
 
