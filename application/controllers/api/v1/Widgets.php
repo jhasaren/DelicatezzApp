@@ -422,6 +422,51 @@ class Widgets extends REST_Controller {
         
     }
 
+    /***************************************************************************
+     * Metodo: crearProducto (POST)
+     * Autor: @jhasaren
+     * Fecha de Creación: 29/09/2022
+     * Response: JSON
+     * Descripcion: Lista de Comercios
+     **************************************************************************/
+    public function getComercios_get() {
+        
+        /*Consulta Modelo*/
+        $dataRequest = $this->MPrincipal->listComercios();
+
+        if ($dataRequest !== FALSE){ /*encuentra datos*/
+
+            // Set the response and exit
+            $this->response([
+                'status' => 1,
+                'message' => 'Lista de Comercios Activos',
+                'information' => $dataRequest
+            ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+
+        } else {
+
+            // Set the response and exit
+            $this->response([
+                'status' => 0,
+                'message' => 'No se encontraron comercios activos.',
+                'information' => 0
+            ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

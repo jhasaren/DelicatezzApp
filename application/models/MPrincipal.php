@@ -232,8 +232,45 @@ class MPrincipal extends CI_Model {
         
     }
 
+    /**************************************************************************/
+    public function listComercios() {
+                
+        $query = $this->db->query("SELECT
+                                i.idComercio,
+                                i.nombreComercio,
+                                i.direccion,
+                                i.telefono,
+                                i.nombrePropietario,
+                                i.horarioAtencion,
+                                i.imgURLComercio,
+                                i.idUsuario,
+                                u.nombreUsuario as usuarioComercio,
+                                u.identificacion as identificacionUsuarioComercio,
+                                u.correoElectronico as emaiComercio
+                                FROM info_comercio i
+                                JOIN usuarios u ON i.idUsuario = u.idUsuario AND u.activo = 'S'
+                                WHERE
+                                i.activo = 'S'");
+        
+        $cant = $query->num_rows();
+        
+        if($cant>0){
+            
+            return $query->result_array();
+            
+        } else {
+            
+            return FALSE;
+            
+        }
+        
+    }
 
 
+
+
+
+    
 
 
 
