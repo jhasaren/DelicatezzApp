@@ -457,16 +457,16 @@ class Widgets extends REST_Controller {
     }
 
     /***************************************************************************
-     * Metodo: getProductos (POST)
+     * Metodo: getProductos (GET)
      * Autor: @jhasaren
      * Fecha de Creación: 29/09/2022
      * Response: JSON
      * Descripcion: Lista de Producto con Calificación
      **************************************************************************/
-    public function getProductos_post() {
+    public function getProductos_get() {
 
         /*Variables*/
-        $idComercio = $this->post('comercio');
+        $idComercio = $this->get('comercio');
 
         if ($idComercio !== NULL) {
 
