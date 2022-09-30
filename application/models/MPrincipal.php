@@ -266,11 +266,47 @@ class MPrincipal extends CI_Model {
         
     }
 
+    /**************************************************************************/
+    public function listProductos($idComercio) {
+                
+        $query = $this->db->query("SELECT
+                                p.idProducto,
+                                p.nombreProducto,
+                                p.precio,
+                                p.infoGeneral,
+                                p.promocion,
+                                p.activo,
+                                p.imgURLProducto,
+                                (
+                                SELECT AVG(valorCalificacion)
+                                FROM calificaciones
+                                WHERE idProducto = p.idProducto
+                                ) AS calificacion_promedio
+                                FROM
+                                productos p
+                                WHERE
+                                p.idComercio = ".$idComercio."
+                                AND p.activo = 'S'");
+        
+        $cant = $query->num_rows();
+        
+        if($cant>0){
+            
+            return $query->result_array();
+            
+        } else {
+            
+            return FALSE;
+            
+        }
+        
+    }
 
 
 
 
-    
+
+
 
 
 

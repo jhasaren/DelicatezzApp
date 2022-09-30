@@ -423,7 +423,7 @@ class Widgets extends REST_Controller {
     }
 
     /***************************************************************************
-     * Metodo: crearProducto (POST)
+     * Metodo: getComercios (GET)
      * Autor: @jhasaren
      * Fecha de Creación: 29/09/2022
      * Response: JSON
@@ -453,6 +453,58 @@ class Widgets extends REST_Controller {
             ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
 
         }
+
+    }
+
+    /***************************************************************************
+     * Metodo: getProductos (GET)
+     * Autor: @jhasaren
+     * Fecha de Creación: 29/09/2022
+     * Response: JSON
+     * Descripcion: Lista de Producto con Calificación
+     **************************************************************************/
+    public function getProductos_get() {
+
+        /*Variables*/
+        $idComercio = $this->post('comercio');
+
+        if ($idComercio !== NULL) {
+
+            /*Consulta Modelo*/
+            $dataRequest = $this->MPrincipal->listProductos($idComercio);
+
+            if ($dataRequest !== FALSE){ /*encuentra datos*/
+
+                // Set the response and exit
+                $this->response([
+                    'status' => 1,
+                    'message' => 'Lista de productos Activos',
+                    'information' => $dataRequest
+                ], REST_Controller::HTTP_OK); // 200
+
+            } else {
+
+                // Set the response and exit
+                $this->response([
+                    'status' => 0,
+                    'message' => 'No se encontraron productos activos.',
+                    'information' => 0
+                ], REST_Controller::HTTP_OK); // 200
+
+            }
+
+        } else {
+
+            // Set the response and exit
+            $this->response([
+                'status' => 0,
+                'message' => 'Faltan parametros obligatorios (comercio)',
+                'information' => 0
+            ], REST_Controller::HTTP_BAD_REQUEST); // 400
+
+        }
+        
+        
 
     }
 
