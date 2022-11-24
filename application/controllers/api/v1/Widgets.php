@@ -32,7 +32,7 @@ class Widgets extends REST_Controller {
         // Set the response and exit
         $this->response([
             'status' => 1,
-            'message' => 'Servicio en funcionamiento'
+            'message' => 'Servicio en funcionamiento, gracias'
         ], REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
 
     }
